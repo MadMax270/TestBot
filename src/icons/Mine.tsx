@@ -11,3 +11,5 @@ const Mine: React.FC<IconProps> = ({ size = 24, className = "" }) => {
 };
 
 export default Mine;
+
+
