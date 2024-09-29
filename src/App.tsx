@@ -6,12 +6,6 @@ import Mine from './icons/Mine';
 import Friends from './icons/Friends';
 import Coins from './icons/Coins';
 
-declare global {
-  interface Window {
-    Telegram: any;
-  }
-}
-
 const App: React.FC = () => {
   const levelNames = [
     "Bronze", "Silver", "Gold", "Platinum", "Diamond",
@@ -27,30 +21,17 @@ const App: React.FC = () => {
   const [points, setPoints] = useState(0);
   const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
 
-  const [user, setUser] = useState({
-    username: '',
-    avatar: '',
-    first_name: '',
-    last_name: ''
+  const [user] = useState<{
+    username: string;
+    avatar: string;
+    first_name: string;
+    last_name: string;
+  }>({
+    username: 'Nikandr',
+    avatar: 'https://example.com/avatar.jpg',
+    first_name: 'Nik',
+    last_name: 'Andr'
   });
-
-  useEffect(() => {
-    // Инициализация Telegram Web App API
-    const tg = window.Telegram.WebApp;
-
-    setUser({
-      username: tg.initDataUnsafe.user?.username || 'Unknown User',
-      avatar: tg.initDataUnsafe.user?.photo_url || 'https://example.com/default-avatar.jpg',
-      first_name: tg.initDataUnsafe.user?.first_name || '',
-      last_name: tg.initDataUnsafe.user?.last_name || ''
-    });
-
-    tg.ready(); // Подготовка Web App интерфейса
-
-    return () => {
-      tg.close();
-    };
-  }, []);
 
   const pointsToAdd = 1;
   const profitPerHour = 0;
@@ -60,7 +41,7 @@ const App: React.FC = () => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    card.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY(${x / 10}deg)`;
+    card.style.transform = perspective(1000px) rotateX(${-y / 10}deg) rotateY(${x / 10}deg);
     setTimeout(() => {
       card.style.transform = '';
     }, 100);
@@ -122,7 +103,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="flex items-center mt-1 border-2 border-[#43433b] rounded-full">
                   <div className="w-full h-2 bg-[#43433b]/[0.6] rounded-full">
-                    <div className="progress-gradient h-2 rounded-full" style={{ width: `${calculateProgress()}%` }}></div>
+                    <div className="progress-gradient h-2 rounded-full" style={{ width: ${calculateProgress()}% }}></div>
                   </div>
                 </div>
               </div>
@@ -184,8 +165,8 @@ const App: React.FC = () => {
           key={click.id}
           className="click-effect text-xl text-white"
           style={{
-            left: `${click.x}px`,
-            top: `${click.y}px`,
+            left: ${click.x}px,
+            top: ${click.y}px,
           }}
           onAnimationEnd={() => handleAnimationEnd(click.id)}
         >
@@ -196,4 +177,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default App; 
