@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Hamster from './icons/Hamster';
-import { dollarCoin, mainCharacter } from './images'; // Удалены binanceLogo и hamsterCoin
+import { dollarCoin, mainCharacter } from './images';
 import Mine from './icons/Mine';
 import Friends from './icons/Friends';
 import Coins from './icons/Coins';
@@ -20,8 +20,7 @@ const App: React.FC = () => {
   const [levelIndex, setLevelIndex] = useState(6);
   const [points, setPoints] = useState(0);
   const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
-  
-  // Удален setUser, оставлен только user
+
   const [user] = useState<{
     username: string;
     avatar: string;
@@ -138,7 +137,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom fixed div */}
       <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] max-w-xl bg-[#272a2f] flex justify-around items-center z-50 rounded-3xl text-xs">
         <div className="text-center text-[#85827d] w-1/5">
           <Friends className="w-8 h-8 mx-auto" />
@@ -165,11 +163,10 @@ const App: React.FC = () => {
       {clicks.map((click) => (
         <div
           key={click.id}
-          className="absolute text-xl text-white"
+          className="click-effect text-xl text-white"
           style={{
             left: `${click.x}px`,
             top: `${click.y}px`,
-            transition: `transform 1s ease-out`,
           }}
           onAnimationEnd={() => handleAnimationEnd(click.id)}
         >
