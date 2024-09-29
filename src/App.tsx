@@ -6,6 +6,12 @@ import Mine from './icons/Mine';
 import Friends from './icons/Friends';
 import Coins from './icons/Coins';
 
+declare global {
+  interface Window {
+    Telegram: any;
+  }
+}
+
 const App: React.FC = () => {
   const levelNames = [
     "Bronze", "Silver", "Gold", "Platinum", "Diamond",
@@ -21,17 +27,30 @@ const App: React.FC = () => {
   const [points, setPoints] = useState(0);
   const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
 
-  const [user] = useState<{
-    username: string;
-    avatar: string;
-    first_name: string;
-    last_name: string;
-  }>({
-    username: 'Nikandr',
-    avatar: 'https://example.com/avatar.jpg',
-    first_name: 'Nik',
-    last_name: 'Andr'
+  const [user, setUser] = useState({
+    username: '',
+    avatar: '',
+    first_name: '',
+    last_name: ''
   });
+
+  useEffect(() => {
+    // Инициализация Telegram Web App API
+    const tg = window.Telegram.WebApp;
+
+    setUser({
+      username: tg.initDataUnsafe.user?.username || 'Unknown User',
+      avatar: tg.initDataUnsafe.user?.photo_url || 'https://example.com/default-avatar.jpg',
+      first_name: tg.initDataUnsafe.user?.first_name || '',
+      last_name: tg.initDataUnsafe.user?.last_name || ''
+    });
+
+    tg.ready(); // Подготовка Web App интерфейса
+
+    return () => {
+      tg.close();
+    };
+  }, []);
 
   const pointsToAdd = 1;
   const profitPerHour = 0;
