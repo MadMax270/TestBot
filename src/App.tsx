@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Hamster from './icons/Hamster';
-import { binanceLogo, dailyCipher, dailyCombo, dailyReward, dollarCoin, hamsterCoin, mainCharacter } from './images';
-import Info from './icons/Info';
-import Settings from './icons/Settings';
+import { binanceLogo, dollarCoin, hamsterCoin, mainCharacter } from './images';
 import Mine from './icons/Mine';
 import Friends from './icons/Friends';
 import Coins from './icons/Coins';
@@ -36,14 +34,22 @@ const App: React.FC = () => {
   ];
 
   const [levelIndex, setLevelIndex] = useState(6);
-  const [points, setPoints] = useState(22749365);
+  const [points, setPoints] = useState(0);
   const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
-  const pointsToAdd = 11;
-  const profitPerHour = 126420;
+  const [user, setUser] = useState<{
+    username: string;
+    avatar: string;
+    first_name: string;
+    last_name: string;
+  }>({
+    username: 'Nikandr',
+    avatar: 'https://example.com/avatar.jpg', // Здесь можно указать ссылку на аватар пользователя
+    first_name: 'Nik',
+    last_name: 'Andr'
+  });
 
-  const [dailyRewardTimeLeft, setDailyRewardTimeLeft] = useState("");
-  const [dailyCipherTimeLeft, setDailyCipherTimeLeft] = useState("");
-  const [dailyComboTimeLeft, setDailyComboTimeLeft] = useState("");
+  const pointsToAdd = 1;
+  const profitPerHour = 0;
 
   const calculateTimeLeft = (targetHour: number) => {
     const now = new Date();
@@ -63,19 +69,6 @@ const App: React.FC = () => {
 
     return `${paddedHours}:${paddedMinutes}`;
   };
-
-  useEffect(() => {
-    const updateCountdowns = () => {
-      setDailyRewardTimeLeft(calculateTimeLeft(0));
-      setDailyCipherTimeLeft(calculateTimeLeft(19));
-      setDailyComboTimeLeft(calculateTimeLeft(12));
-    };
-
-    updateCountdowns();
-    const interval = setInterval(updateCountdowns, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
@@ -136,10 +129,10 @@ const App: React.FC = () => {
         <div className="px-4 z-10">
           <div className="flex items-center space-x-2 pt-4">
             <div className="p-1 rounded-lg bg-[#1d2025]">
-              <Hamster size={24} className="text-[#d4d4d4]" />
+              <img src={user.avatar} alt="User Avatar" className="w-8 h-8 rounded-full" />
             </div>
             <div>
-              <p className="text-sm">Nikandr (CEO)</p>
+              <p className="text-sm">{user.username} (CEO)</p>
             </div>
           </div>
           <div className="flex items-center justify-between space-x-4 mt-1">
@@ -156,19 +149,7 @@ const App: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center w-2/3 border-2 border-[#43433b] rounded-full px-4 py-[2px] bg-[#43433b]/[0.6] max-w-64">
-              <img src={binanceLogo} alt="Exchange" className="w-8 h-8" />
-              <div className="h-[32px] w-[2px] bg-[#43433b] mx-2"></div>
-              <div className="flex-1 text-center">
-                <p className="text-xs text-[#85827d] font-medium">Profit per hour</p>
-                <div className="flex items-center justify-center space-x-1">
-                  <img src={dollarCoin} alt="Dollar Coin" className="w-[18px] h-[18px]" />
-                  <p className="text-sm">{formatProfitPerHour(profitPerHour)}</p>
-                  <Info size={20} className="text-[#43433b]" />
-                </div>
-              </div>
-              <div className="h-[32px] w-[2px] bg-[#43433b] mx-2"></div>
-              <Settings className="text-white" />
+            <div>
             </div>
           </div>
         </div>
@@ -176,24 +157,6 @@ const App: React.FC = () => {
         <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
           <div className="absolute top-[2px] left-0 right-0 bottom-0 bg-[#1d2025] rounded-t-[46px]">
             <div className="px-4 mt-6 flex justify-between gap-2">
-              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
-                <div className="dot"></div>
-                <img src={dailyReward} alt="Daily Reward" className="mx-auto w-12 h-12" />
-                <p className="text-[10px] text-center text-white mt-1">Daily reward</p>
-                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">{dailyRewardTimeLeft}</p>
-              </div>
-              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
-                <div className="dot"></div>
-                <img src={dailyCipher} alt="Daily Cipher" className="mx-auto w-12 h-12" />
-                <p className="text-[10px] text-center text-white mt-1">Daily cipher</p>
-                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">{dailyCipherTimeLeft}</p>
-              </div>
-              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
-                <div className="dot"></div>
-                <img src={dailyCombo} alt="Daily Combo" className="mx-auto w-12 h-12" />
-                <p className="text-[10px] text-center text-white mt-1">Daily combo</p>
-                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">{dailyComboTimeLeft}</p>
-              </div>
             </div>
 
             <div className="px-4 mt-4 flex justify-center">
@@ -219,25 +182,25 @@ const App: React.FC = () => {
 
       {/* Bottom fixed div */}
       <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] max-w-xl bg-[#272a2f] flex justify-around items-center z-50 rounded-3xl text-xs">
-        <div className="text-center text-[#85827d] w-1/5 bg-[#1c1f24] m-1 p-2 rounded-2xl">
-          <img src={binanceLogo} alt="Exchange" className="w-8 h-8 mx-auto" />
-          <p className="mt-1">Exchange</p>
-        </div>
-        <div className="text-center text-[#85827d] w-1/5">
-          <Mine className="w-8 h-8 mx-auto" />
-          <p className="mt-1">Mine</p>
+      <div className="text-center text-[#85827d] w-1/5">
+          <Friends className="w-8 h-8 mx-auto" />
+          <p className="mt-1">Soon</p>
         </div>
         <div className="text-center text-[#85827d] w-1/5">
           <Friends className="w-8 h-8 mx-auto" />
-          <p className="mt-1">Friends</p>
+          <p className="mt-1">Soon</p>
+        </div>
+        <div className="text-center text-[#85827d] w-1/5 bg-[#1c1f24] m-1 p-2 rounded-2xl">
+        <Mine className="w-8 h-8 mx-auto" />
+          <p className="mt-1">Mine</p>
         </div>
         <div className="text-center text-[#85827d] w-1/5">
           <Coins className="w-8 h-8 mx-auto" />
-          <p className="mt-1">Earn</p>
+          <p className="mt-1">Soon</p>
         </div>
         <div className="text-center text-[#85827d] w-1/5">
-          <img src={hamsterCoin} alt="Airdrop" className="w-8 h-8 mx-auto" />
-          <p className="mt-1">Airdrop</p>
+          <Hamster className="w-8 h-8 mx-auto" />
+          <p className="mt-1">Soon</p>
         </div>
       </div>
 
