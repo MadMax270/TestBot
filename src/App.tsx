@@ -1,74 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Hamster from './icons/Hamster';
-import { dollarCoin, mainCharacter } from './images';
+import { dollarCoin, mainCharacter } from './images'; // Удалены binanceLogo и hamsterCoin
 import Mine from './icons/Mine';
 import Friends from './icons/Friends';
 import Coins from './icons/Coins';
 
 const App: React.FC = () => {
   const levelNames = [
-    "Bronze",    // From 0 to 4999 coins
-    "Silver",    // From 5000 coins to 24,999 coins
-    "Gold",      // From 25,000 coins to 99,999 coins
-    "Platinum",  // From 100,000 coins to 999,999 coins
-    "Diamond",   // From 1,000,000 coins to 2,000,000 coins
-    "Epic",      // From 2,000,000 coins to 10,000,000 coins
-    "Legendary", // From 10,000,000 coins to 50,000,000 coins
-    "Master",    // From 50,000,000 coins to 100,000,000 coins
-    "GrandMaster", // From 100,000,000 coins to 1,000,000,000 coins
-    "Lord"       // From 1,000,000,000 coins to ∞
+    "Bronze", "Silver", "Gold", "Platinum", "Diamond",
+    "Epic", "Legendary", "Master", "GrandMaster", "Lord"
   ];
 
   const levelMinPoints = [
-    0,        // Bronze
-    5000,     // Silver
-    25000,    // Gold
-    100000,   // Platinum
-    1000000,  // Diamond
-    2000000,  // Epic
-    10000000, // Legendary
-    50000000, // Master
-    100000000,// GrandMaster
-    1000000000// Lord
+    0, 5000, 25000, 100000, 1000000,
+    2000000, 10000000, 50000000, 100000000, 1000000000
   ];
 
   const [levelIndex, setLevelIndex] = useState(6);
   const [points, setPoints] = useState(0);
   const [clicks, setClicks] = useState<{ id: number, x: number, y: number }[]>([]);
-  const [user, setUser] = useState<{
+  
+  // Удален setUser, оставлен только user
+  const [user] = useState<{
     username: string;
     avatar: string;
     first_name: string;
     last_name: string;
   }>({
     username: 'Nikandr',
-    avatar: 'https://example.com/avatar.jpg', // Здесь можно указать ссылку на аватар пользователя
+    avatar: 'https://example.com/avatar.jpg',
     first_name: 'Nik',
     last_name: 'Andr'
   });
 
   const pointsToAdd = 1;
   const profitPerHour = 0;
-
-  const calculateTimeLeft = (targetHour: number) => {
-    const now = new Date();
-    const target = new Date(now);
-    target.setUTCHours(targetHour, 0, 0, 0);
-
-    if (now.getUTCHours() >= targetHour) {
-      target.setUTCDate(target.getUTCDate() + 1);
-    }
-
-    const diff = target.getTime() - now.getTime();
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    const paddedHours = hours.toString().padStart(2, '0');
-    const paddedMinutes = minutes.toString().padStart(2, '0');
-
-    return `${paddedHours}:${paddedMinutes}`;
-  };
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
@@ -85,7 +52,7 @@ const App: React.FC = () => {
   };
 
   const handleAnimationEnd = (id: number) => {
-    setClicks((prevClicks) => prevClicks.filter(click => click.id !== id));
+    setClicks(prevClicks => prevClicks.filter(click => click.id !== id));
   };
 
   const calculateProgress = () => {
@@ -107,13 +74,6 @@ const App: React.FC = () => {
       setLevelIndex(levelIndex - 1);
     }
   }, [points, levelIndex, levelMinPoints, levelNames.length]);
-
-  const formatProfitPerHour = (profit: number) => {
-    if (profit >= 1000000000) return `+${(profit / 1000000000).toFixed(2)}B`;
-    if (profit >= 1000000) return `+${(profit / 1000000).toFixed(2)}M`;
-    if (profit >= 1000) return `+${(profit / 1000).toFixed(2)}K`;
-    return `+${profit}`;
-  };
 
   useEffect(() => {
     const pointsPerSecond = Math.floor(profitPerHour / 3600);
@@ -149,8 +109,6 @@ const App: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div>
-            </div>
           </div>
         </div>
 
@@ -182,7 +140,7 @@ const App: React.FC = () => {
 
       {/* Bottom fixed div */}
       <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] max-w-xl bg-[#272a2f] flex justify-around items-center z-50 rounded-3xl text-xs">
-      <div className="text-center text-[#85827d] w-1/5">
+        <div className="text-center text-[#85827d] w-1/5">
           <Friends className="w-8 h-8 mx-auto" />
           <p className="mt-1">Soon</p>
         </div>
@@ -191,7 +149,7 @@ const App: React.FC = () => {
           <p className="mt-1">Soon</p>
         </div>
         <div className="text-center text-[#85827d] w-1/5 bg-[#1c1f24] m-1 p-2 rounded-2xl">
-        <Mine className="w-8 h-8 mx-auto" />
+          <Mine className="w-8 h-8 mx-auto" />
           <p className="mt-1">Mine</p>
         </div>
         <div className="text-center text-[#85827d] w-1/5">
@@ -207,11 +165,11 @@ const App: React.FC = () => {
       {clicks.map((click) => (
         <div
           key={click.id}
-          className="absolute text-5xl font-bold opacity-0 text-white pointer-events-none"
+          className="absolute text-xl text-white"
           style={{
-            top: `${click.y - 42}px`,
-            left: `${click.x - 28}px`,
-            animation: `float 1s ease-out`
+            left: `${click.x}px`,
+            top: `${click.y}px`,
+            transition: `transform 1s ease-out`,
           }}
           onAnimationEnd={() => handleAnimationEnd(click.id)}
         >
